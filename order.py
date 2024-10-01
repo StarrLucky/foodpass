@@ -9,7 +9,9 @@ import time
 import datetime
 import config
 
+
 options = Options()
+
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
 def login(id, password):
@@ -19,15 +21,22 @@ def login(id, password):
     input_password = driver.find_element(By.XPATH, '//*[@id="password"]')
     input_password.send_keys(password)
     driver.find_element(By.XPATH, '//*[@id="customer_login"]/div[1]/form/p[3]/button').click()
-    
 
 
-def makeOrder(): 
-    driver.get('https://foodpassonline.com/product/%d0%b3%d1%80%d0%b5%d1%87%d0%ba%d0%b0/')
+def addItemInCart(URL):
+    driver.get(URL)
     driver.find_element(By.XPATH, '//*[@id="wp--skip-link--target"]/div/div/div[1]/div[3]/div[2]/div[3]/form/button').click()
-    driver.get('https://foodpassonline.com/product/%d0%ba%d1%83%d1%80%d0%b8%d0%bd%d1%8b%d0%b9-%d1%88%d0%bd%d0%b8%d1%86%d0%b5%d0%bb%d1%8c/')
-    driver.find_element(By.XPATH, '//*[@id="wp--skip-link--target"]/div/div/div[1]/div[3]/div[2]/div[3]/form/button').click()
-    driver.get('https://foodpassonline.com/checkout-2/')    
+
+
+def makeOrder(meals): 
+    for url in meals:
+        addItemInCart(url)
+
+    # driver.get('https://foodpassonline.com/product/%d0%b3%d1%80%d0%b5%d1%87%d0%ba%d0%b0/')
+    # driver.find_element(By.XPATH, '//*[@id="wp--skip-link--target"]/div/div/div[1]/div[3]/div[2]/div[3]/form/button').click()
+    # driver.get('https://foodpassonline.com/product/%d0%ba%d1%83%d1%80%d0%b8%d0%bd%d1%8b%d0%b9-%d1%88%d0%bd%d0%b8%d1%86%d0%b5%d0%bb%d1%8c/')
+    # driver.find_element(By.XPATH, '//*[@id="wp--skip-link--target"]/div/div/div[1]/div[3]/div[2]/div[3]/form/button').click()
+    # driver.get('https://foodpassonline.com/checkout-2/')    
     driver.find_element(By.XPATH, '//*[@id="place_order"]').click()
 
 
@@ -39,7 +48,7 @@ currentDate = datetime.datetime.now().strftime("%d %B %Y").lstrip('0')
 if currentDate not in driver.page_source:
    makeOrder()
 else:
-    print("You have already ordered something today.")
+    print("User have already ordered something today.")
 
 driver.quit()
 
