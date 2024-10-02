@@ -3,7 +3,10 @@ FROM ubuntu:24.04
 
 ADD config.py ..
 ADD order.py ..
+ADD makeOrders.py .. 
+ADD user.py ..
 ADD requirements.txt .. 
+
 
 RUN apt update && apt install -y  \
     python3 \ 
@@ -13,6 +16,6 @@ RUN apt update && apt install -y  \
 RUN pip3 install -r requirements.txt  --break-system-packages
 
 
-RUN python3 order.py
+RUN  python3 makeOrders.py
 
 
