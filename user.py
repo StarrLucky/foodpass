@@ -1,11 +1,11 @@
 class user:
-    login = ""
-    pasword = ""
+    username = ""
+    password = ""
     meals = []
 
-    def __init__(self, login, password, meals) -> None:
-        self.login = login
-        self.pasword = password
+    def __init__(self, username, password, meals) -> None:
+        self.username = username
+        self.password = password
         self.meals = meals
     
     def test(self):
