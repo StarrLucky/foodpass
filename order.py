@@ -28,9 +28,9 @@ class order:
         if current_date not in self.driver.page_source:
             for url in meals:
                 self.add_item_in_cart(url)
-            # self.driver.find_element(By.XPATH, '//*[@id="place_order"]').click()   // order
+            self.driver.find_element(By.XPATH, '//*[@id="place_order"]').click()   // order
         else:
-            print("User {} have already ordered something today.".format())
+            print("Today, the user has already placed an order.")
 
         self.driver.quit()
 
