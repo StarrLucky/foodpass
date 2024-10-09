@@ -1,2 +1,2 @@
-selenium
-webdriver_manager
+selenium==4.10.0
+webdriver-manager
