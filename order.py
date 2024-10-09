@@ -34,6 +34,5 @@ class order:
             self.driver.find_element(By.XPATH, '//*[@id="place_order"]').click() 
         else:
             print("Today, the user has already placed an order.")
-            print("Today, the user has already placed an order.")
 
         self.driver.quit()
