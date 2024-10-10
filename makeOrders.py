@@ -5,8 +5,7 @@ import time
 
 now = datetime.datetime.now()
 
-
-if 14 < now.hour < 22:
+if 14 <= now.hour < 22:
     for u in config.userList:
         print("Ordering for {}".format(u.username))
         newOrder = order.order()

@@ -1,16 +1,16 @@
 from selenium.webdriver.common.by import By
 import datetime
 from selenium import webdriver
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.firefox.options import Options
-from webdriver_manager.firefox import GeckoDriverManager
-from selenium.webdriver.firefox.service import Service as FirefoxService
+from pyvirtualdisplay import Display
+
+
 class order:
     driver = None
     def __init__(self) -> None:
-        opts = Options()
-        opts.add_argument("--headless")
-        self.driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()),options=opts)
+        display = Display(visible=0, size=(800, 600))
+        display.start()
+        self.driver = webdriver.Firefox()
+
         
     def login(self, username, password):
         self.driver.get('https://foodpassonline.com/menuorder/')
