@@ -2,14 +2,18 @@ from selenium.webdriver.common.by import By
 import datetime
 from selenium import webdriver
 from pyvirtualdisplay import Display
+from selenium.webdriver.chrome.service import Service
 
 
 class order:
     driver = None
     def __init__(self) -> None:
+
         display = Display(visible=0, size=(800, 600))
+        
         display.start()
-        self.driver = webdriver.Firefox()
+        self.driver = webdriver.Chrome()
+        self.driver.maximize_window()
 
         
     def login(self, username, password):
@@ -25,14 +29,14 @@ class order:
         self.driver.find_element(By.XPATH, '//*[@id="wp--skip-link--target"]/div/div/div[1]/div[3]/div[2]/div[3]/form/button').click()
 
     def make_order(self, meals):
-        self.driver.get('https://foodpassonline.m/login-2/orders/')
+        self.driver.get('https://foodpassonline.com/login-2/orders/')
         current_date = datetime.datetime.now().strftime("%d %B %Y").lstrip('0')
 
         if current_date not in self.driver.page_source:
             for url in meals:
                 self.add_item_in_cart(url)
             self.driver.find_element(By.XPATH, '//*[@id="place_order"]').click() 
-        else:
+        else: 
             print("Today, the user has already placed an order.")
 
         self.driver.quit()
