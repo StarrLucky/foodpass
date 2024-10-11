@@ -25,7 +25,7 @@ class order:
         self.driver.find_element(By.XPATH, '//*[@id="wp--skip-link--target"]/div/div/div[1]/div[3]/div[2]/div[3]/form/button').click()
 
     def make_order(self, meals):
-        self.driver.get('https://foodpassonline.m/login-2/orders/')
+        self.driver.get('https://foodpassonline.com/login-2/orders/')
         current_date = datetime.datetime.now().strftime("%d %B %Y").lstrip('0')
 
         if current_date not in self.driver.page_source:
