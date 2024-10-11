@@ -1,16 +1,15 @@
 from selenium.webdriver.common.by import By
 import datetime
 from selenium import webdriver
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.firefox.options import Options
-from webdriver_manager.firefox import GeckoDriverManager
-from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.chrome.service import Service
+
 class order:
     driver = None
     def __init__(self) -> None:
-        opts = Options()
-        opts.add_argument("--headless")
-        self.driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()),options=opts)
+        service = Service()
+        options = webdriver.ChromeOptions()
+        # options.add_argument("--headless")
+        self.driver = webdriver.Chrome(service=service, options=options)
         
     def login(self, username, password):
         self.driver.get('https://foodpassonline.com/menuorder/')
@@ -31,6 +30,7 @@ class order:
         if current_date not in self.driver.page_source:
             for url in meals:
                 self.add_item_in_cart(url)
+            
             self.driver.find_element(By.XPATH, '//*[@id="place_order"]').click() 
         else:
             print("Today, the user has already placed an order.")
