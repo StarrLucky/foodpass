@@ -31,7 +31,12 @@ class order:
             for url in meals:
                 self.add_item_in_cart(url)
             
-            self.driver.find_element(By.XPATH, '//*[@id="place_order"]').click() 
+            self.driver.get("https://foodpassonline.com/checkout-2/") # Go to Cart
+        
+            order_btn = self.driver.find_element(By.XPATH, '//*[@id="place_order"]')
+            self.driver.execute_script("arguments[0].click();", order_btn)
+
+
         else:
             print("Today, the user has already placed an order.")
 
