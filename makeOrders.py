@@ -9,7 +9,7 @@ import pytz
 my_tz = pytz.timezone("Asia/Tbilisi") 
 time_now = datetime.now(my_tz)
 
-if 14 <= time_now.hour < 24:
+if 10 <= time_now.hour < 24:
     for u in config.userList:
         print("Ordering for {}".format(u.username))
         newOrder = order.order()
@@ -17,4 +17,4 @@ if 14 <= time_now.hour < 24:
         newOrder.make_order(u.meals)
 
 else:
-    print("Current time {} is out  of order hours (14:00 - 22:00 GMT+4)".format(now)  )
+    print("Current time {} is out  of order hours (14:00 - 22:00 GMT+4)".format(time_now)  )
