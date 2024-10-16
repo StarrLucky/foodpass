@@ -1,21 +1,32 @@
 FROM python:latest
 
-ADD config.py ..
+ADD config.py .. 
 ADD order.py ..
 ADD makeOrders.py .. 
 ADD user.py ..
 ADD requirements.txt .. 
+ADD crontab /etc/cron.d/hello-cron
 
-RUN apt-get update && apt-get install firefox-esr cron -y
+RUN apt-get update && apt-get install python3 cron -y
 RUN pip3 install -r requirements.txt  --break-system-packages
 
+# install google chrome
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+RUN apt-get -y update
+RUN apt-get install -y google-chrome-stable
+RUN wget --no-verbose -O /tmp/chrome.deb https://mirror.cs.uchicago.edu/google-chrome/pool/main/g/google-chrome-stable/google-chrome-stable_114.0.5735.106-1_amd64.deb \
+  && apt install -y  /tmp/chrome.deb  --allow-downgrades\
+  && rm /tmp/chrome.deb 
+# install chromedriver
+RUN apt-get install -yqq unzip
+RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
+RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
+# set display port to avoid crash
+ENV DISPLAY=:99
 
-RUN touch /foodpass.log
+RUN chmod 0644 /etc/cron.d/hello-cron
+RUN crontab /etc/cron.d/hello-cron
+RUN touch foodpass.log
 
-
-RUN (crontab -l ; echo "00 15 * * * python3 makeOrders.py  >> foodpass.log 2>&1") | crontab
-
-
-# CMD  [python3, makeOrders.py]
-CMD ["tail", "-f", "foodpass.log"]
-
+CMD cron && tail -f /foodpass.log
