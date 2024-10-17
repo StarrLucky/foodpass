@@ -3,6 +3,7 @@ import datetime
 from selenium import webdriver
 from pyvirtualdisplay import Display
 from selenium.webdriver.chrome.service import Service
+from selenium.common.exceptions import NoSuchElementException
 
 
 class order:
@@ -17,12 +18,22 @@ class order:
 
         
     def login(self, username, password):
-        self.driver.get('https://foodpassonline.com/menuorder/')
-        input_username = self.driver.find_element(By.XPATH, '//*[@id="username"]')
-        input_username.send_keys(username)
-        input_password = self.driver.find_element(By.XPATH, '//*[@id="password"]')
-        input_password.send_keys(password)
-        self.driver.find_element(By.XPATH, '//*[@id="customer_login"]/div[1]/form/p[3]/button').click()
+        try:
+            self.driver.get('https://foodpassonline.com/menuorder/')
+            input_username = self.driver.find_element(By.XPATH, '//*[@id="username"]')
+            input_username.send_keys(username)
+            input_password = self.driver.find_element(By.XPATH, '//*[@id="password"]')
+            input_password.send_keys(password)
+            login_btn = self.driver.find_element(By.XPATH, '//*[@id="customer_login"]/div[1]/form/p[3]/button')
+            login_btn.click()
+            if len(self.driver.page_source) > 0:
+                return True
+            else:
+                return False
+        except NoSuchElementException: 
+            return False
+
+    
 
     def add_item_in_cart(self, url):
         self.driver.get(url)
