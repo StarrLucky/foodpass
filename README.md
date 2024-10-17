@@ -3,13 +3,12 @@ This script automates placing orders on [foodpassonline.com](https://foodpassonl
 
 ## Example of the Config
 
-```python
-userList = [
-    users.user("User", 
-        "Password", 
-        ["https://foodpassonline.com/product/%d0%b3%d1%80%d0%b5%d1%87%d0%ba%d0%b0/",
-         "https://foodpassonline.com/product/%d0%ba%d1%83%d1%80%d0%b8%d0%bd%d1%8b%d0%b9-%d1%88%d0%bd%d0%b8%d1%86%d0%b5%d0%bb%d1%8c/"])
-]
+    userList = [
+        users.user("User", 
+            "Password", 
+            ["https://foodpassonline.com/product/%d0%b3%d1%80%d0%b5%d1%87%d0%ba%d0%b0/",
+            "https://foodpassonline.com/product/%d0%ba%d1%83%d1%80%d0%b8%d0%bd%d1%8b%d0%b9-%d1%88%d0%bd%d0%b8%d1%86%d0%b5%d0%bb%d1%8c/"])
+        ]
 
 
 In the example above, the first and second links point to the items that need to be ordered.
