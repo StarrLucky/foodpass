@@ -16,3 +16,7 @@ install:
 
 make orders:
 	python3 makeOrders.py
+
+make tests:
+	. venv/bin/activate
+	python3 test.py

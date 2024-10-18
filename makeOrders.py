@@ -14,6 +14,7 @@ if 14 <= time_now.hour < 22:
         print("Ordering for {}".format(u.username))
         newOrder = order.order()
         newOrder.login(u.username, u.password)
+        newOrder.clear_cart()
         if newOrder.make_order(u.meals):
             print("Order for {} is successfull".format(u.username))
         else:
