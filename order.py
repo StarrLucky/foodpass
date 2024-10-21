@@ -32,10 +32,10 @@ class order:
 
     def clear_cart(self):
         self.driver.get('https://foodpassonline.com/%D0%BA%D0%BE%D1%80%D0%B7%D0%B8%D0%BD%D0%B0/')
-        hrefs = self.driver.find_elements(By.CLASS_NAME , "product-remove")
+        hrefs = self.driver.find_elements(By.CLASS_NAME , "remove")
         for url in hrefs:
             self.driver.get(url.get_attribute('href'))
-            print("Deleted item")
+            print("Deleted item from cart.")
 
     def add_item_in_cart(self, url):
         self.driver.get(url)
@@ -57,5 +57,3 @@ class order:
         else: 
             print("Today, the user has already placed an order.")
             return False
-
-        self.driver.quit()
