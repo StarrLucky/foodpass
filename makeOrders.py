@@ -3,7 +3,6 @@ import order
 import datetime
 import time 
 
-from datetime import datetime
 import pytz
 
 my_tz = pytz.timezone("Asia/Tbilisi") 
