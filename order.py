@@ -36,6 +36,7 @@ class order:
             if "0.00₾" in self.driver.page_source:
                 return True
             else:
+                print("Order sum is not 0 lari.")
                 return False
 
     def clear_cart(self):
@@ -59,6 +60,7 @@ class order:
     def order_meals(self, meals):
         for url in meals:
             self.add_item_in_cart(url)
+            print("Added meal {0} to the cart".format(url))
         return  True
 
     def order_lunchboxes(self, lunchboxes):
@@ -66,6 +68,7 @@ class order:
             try:
                 self.driver.get(url)
                 self.add_item_in_cart(url)
+                print("Added lunchbox {0} to the cart".format(url))
                 return  True
             except NotFoundErr:
                 pass
@@ -73,8 +76,11 @@ class order:
 
     def submit_order(self):
         self.driver.get("https://foodpassonline.com/checkout-2/")  # Go to Cart
-        order_btn = self.driver.find_element(By.XPATH, '//*[@id="place_order"]')
-        self.driver.execute_script("arguments[0].click();", order_btn)
+        if self.is_order_free():
+            order_btn = self.driver.find_element(By.XPATH, '//*[@id="place_order"]')
+            self.driver.execute_script("arguments[0].click();", order_btn)
+            return  True
+        return False
 
     def form_order(self, meals, lunchboxes):
         self.driver.get('https://foodpassonline.com/login-2/orders/')
