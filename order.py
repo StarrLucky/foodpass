@@ -5,6 +5,19 @@ import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import NoSuchElementException
+import requests
+
+
+def check_url(url):
+    request_response = requests.head(url)
+    status_code = request_response.status_code
+    if status_code == 200:
+        print("URL {0} is valid/up".format(url))
+        return True
+    else:
+        print("URL {0} is invalid/down".format(url))
+        return False
+
 
 class order:
     driver = None
@@ -51,11 +64,13 @@ class order:
 
     def add_item_in_cart(self, url):
         try:
-            self.driver.get(url)
-            self.driver.find_element(By.XPATH, '//*[@id="wp--skip-link--target"]/div/div/div[1]/div[3]/div[2]/div[3]/form/button').click()
-            return  True
+            if check_url(url):
+                self.driver.get(url)
+                self.driver.find_element(By.XPATH, '//*[@id="wp--skip-link--target"]/div/div/div[1]/div[3]/div[2]/div[3]/form/button').click()
+                return  True
         except NoSuchElementException:
-            return False
+            pass
+        return False
 
     def order_meals(self, meals):
         for url in meals:
@@ -66,17 +81,19 @@ class order:
     def order_lunchboxes(self, lunchboxes):
         for url in lunchboxes:
             try:
-                self.driver.get(url)
-                self.add_item_in_cart(url)
-                print("Added lunchbox {0} to the cart".format(url))
-                return  True
+                if check_url(url):
+                    self.driver.get(url)
+                    self.add_item_in_cart(url)
+                    print("Added lunchbox {0} to the cart".format(url))
+                    return  True
             except NotFoundErr:
                 pass
         return False
 
     def submit_order(self):
         self.driver.get("https://foodpassonline.com/checkout-2/")  # Go to Cart
-        if self.is_order_free():
+        # if self.is_order_free():
+        if True:
             order_btn = self.driver.find_element(By.XPATH, '//*[@id="place_order"]')
             self.driver.execute_script("arguments[0].click();", order_btn)
             return  True
