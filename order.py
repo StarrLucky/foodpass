@@ -5,6 +5,7 @@ import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import StaleElementReferenceException
 import requests
 
 
@@ -24,9 +25,9 @@ class order:
     def __init__(self) -> None:
         service = Service()
         options = webdriver.ChromeOptions()
-        options.add_argument("--headless")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
+        # options.add_argument("--headless")
+        # options.add_argument("--no-sandbox")
+        # options.add_argument("--disable-dev-shm-usage")
         self.driver = webdriver.Chrome(service=service, options=options)
         
     def login(self, username, password):
@@ -56,11 +57,18 @@ class order:
         try:
             self.driver.get('https://foodpassonline.com/%D0%BA%D0%BE%D1%80%D0%B7%D0%B8%D0%BD%D0%B0/')
             hrefs = self.driver.find_elements(By.CLASS_NAME , "remove")
-            for url in hrefs:
-                self.driver.get(url.get_attribute('href'))
-                print("Deleted item from cart.")
+            print(hrefs)
+            try:
+                for u in hrefs:
+                    url = self.driver.find_elements(By.CLASS_NAME , "remove")[0].get_attribute('href')
+                    self.driver.get(url)
+                    print("Deleted item from cart.")
+            except StaleElementReferenceException:
+                return False
+
         except NoSuchElementException:
             return False
+
 
     def add_item_in_cart(self, url):
         try:
@@ -95,7 +103,7 @@ class order:
         # if self.is_order_free():
         if True:
             order_btn = self.driver.find_element(By.XPATH, '//*[@id="place_order"]')
-            self.driver.execute_script("arguments[0].click();", order_btn)
+            # self.driver.execute_script("arguments[0].click();", order_btn)
             return  True
         return False
 
