@@ -7,7 +7,7 @@ ADD user.py ..
 ADD requirements.txt .. 
 ADD crontab /etc/cron.d/hello-cron
 
-RUN apt-get update && apt-get install python3 cron -y
+RUN apt-get update && apt-get install python3 cron nano -y
 RUN pip3 install -r requirements.txt  --break-system-packages
 
 # install google chrome

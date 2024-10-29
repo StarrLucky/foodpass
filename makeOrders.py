@@ -15,11 +15,12 @@ if 10 <= time_now.hour < 24:
         newOrder = order.order()
         newOrder.login(u.username, u.password)
         newOrder.clear_cart()
-        success = newOrder.make_order(u.meals)
-        newOrder.driver.delete_all_cookies()
-        if success:
+        newOrder.form_order(u.meals, u.lunchboxes)
+        if  newOrder.submit_order():
             print("Order for {} is successfull".format(u.username))
         else:
             print("Failed to make an order for {}".format(u.username))
+
+        newOrder.driver.delete_all_cookies()
 else:
     print("Current time {} is out  of order hours (14:00 - 22:00 GMT+4)".format(time_now)  )
