@@ -1,8 +1,24 @@
+from xml.dom import NotFoundErr
+
 from selenium.webdriver.common.by import By
 import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import StaleElementReferenceException
+import requests
+
+
+def check_url(url):
+    request_response = requests.head(url)
+    status_code = request_response.status_code
+    if status_code == 200:
+        print("URL {0} is valid/up".format(url))
+        return True
+    else:
+        print("URL {0} is invalid/down".format(url))
+        return False
+
 
 class order:
     driver = None
@@ -30,30 +46,80 @@ class order:
         except NoSuchElementException: 
             return False
 
+    def is_order_free(self):
+            if "0.00₾" in self.driver.page_source:
+                return True
+            else:
+                print("Order sum is not 0 lari.")
+                return False
+
     def clear_cart(self):
-        self.driver.get('https://foodpassonline.com/%D0%BA%D0%BE%D1%80%D0%B7%D0%B8%D0%BD%D0%B0/')
-        hrefs = self.driver.find_elements(By.CLASS_NAME , "remove")
-        for url in hrefs:
-            self.driver.get(url.get_attribute('href'))
-            print("Deleted item from cart.")
+        try:
+            self.driver.get('https://foodpassonline.com/%D0%BA%D0%BE%D1%80%D0%B7%D0%B8%D0%BD%D0%B0/')
+            hrefs = self.driver.find_elements(By.CLASS_NAME , "remove")
+            print(hrefs)
+            try:
+                for u in hrefs:
+                    url = self.driver.find_elements(By.CLASS_NAME , "remove")[0].get_attribute('href')
+                    self.driver.get(url)
+                    print("Deleted item from cart.")
+            except StaleElementReferenceException:
+                return False
+
+        except NoSuchElementException:
+            return False
+
 
     def add_item_in_cart(self, url):
-        self.driver.get(url)
-        self.driver.find_element(By.XPATH, '//*[@id="wp--skip-link--target"]/div/div/div[1]/div[3]/div[2]/div[3]/form/button').click()
+        try:
+            if check_url(url):
+                self.driver.get(url)
+                self.driver.find_element(By.XPATH, '//*[@id="wp--skip-link--target"]/div/div/div[1]/div[3]/div[2]/div[3]/form/button').click()
+                return  True
+        except NoSuchElementException:
+            pass
+        return False
 
-    def make_order(self, meals):
+    def order_meals(self, meals):
+        for url in meals:
+            self.add_item_in_cart(url)
+            print("Added meal {0} to the cart".format(url))
+        return  True
+
+    def order_lunchboxes(self, lunchboxes):
+        for url in lunchboxes:
+            try:
+                if check_url(url):
+                    self.driver.get(url)
+                    self.add_item_in_cart(url)
+                    print("Added lunchbox {0} to the cart".format(url))
+                    return  True
+            except NotFoundErr:
+                pass
+        return False
+
+    def submit_order(self):
+        self.driver.get("https://foodpassonline.com/checkout-2/")  # Go to Cart
+        # if self.is_order_free():
+        if True:
+            order_btn = self.driver.find_element(By.XPATH, '//*[@id="place_order"]')
+            self.driver.execute_script("arguments[0].click();", order_btn)
+            return  True
+        return False
+
+    def form_order(self, meals, lunchboxes):
         self.driver.get('https://foodpassonline.com/login-2/orders/')
         current_date = datetime.datetime.now().strftime("%d %B %Y").lstrip('0')
 
-        if current_date not in self.driver.page_source:
-            for url in meals:
-                self.add_item_in_cart(url)
-            
-            self.driver.get("https://foodpassonline.com/checkout-2/") # Go to Cart
-        
-            order_btn = self.driver.find_element(By.XPATH, '//*[@id="place_order"]')
-            self.driver.execute_script("arguments[0].click();", order_btn)
-            return True
-        else: 
-            print("Today, the user has already placed an order.")
+        if current_date in self.driver.page_source:
+            print("Today user has already placed an order.")
             return False
+        else:
+            # add any of the lunchboxes to the cart. If nothing is present, then adding a list of meals to the cart.
+            if self.order_lunchboxes(lunchboxes):
+                return  True
+            elif self.order_meals(meals):
+                return  True
+            else:
+                return  False
+
