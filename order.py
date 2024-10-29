@@ -25,9 +25,9 @@ class order:
     def __init__(self) -> None:
         service = Service()
         options = webdriver.ChromeOptions()
-        # options.add_argument("--headless")
-        # options.add_argument("--no-sandbox")
-        # options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--headless")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
         self.driver = webdriver.Chrome(service=service, options=options)
         
     def login(self, username, password):
@@ -103,7 +103,7 @@ class order:
         # if self.is_order_free():
         if True:
             order_btn = self.driver.find_element(By.XPATH, '//*[@id="place_order"]')
-            # self.driver.execute_script("arguments[0].click();", order_btn)
+            self.driver.execute_script("arguments[0].click();", order_btn)
             return  True
         return False
 
