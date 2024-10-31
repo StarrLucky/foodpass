@@ -15,11 +15,11 @@ if 10 <= time_now.hour < 24:
         newOrder = order.order()
         newOrder.login(u.username, u.password)
         newOrder.clear_cart()
-        newOrder.form_order(u.meals, u.lunchboxes)
-        if  newOrder.submit_order():
-            print("Order for {} is successfull".format(u.username))
-        else:
-            print("Failed to make an order for {}".format(u.username))
+        if newOrder.form_order(u.meals, u.lunchboxes):
+            if  newOrder.submit_order():
+                print("Order for {} is successfull".format(u.username))
+            else:
+                print("Failed to make an order for {}".format(u.username))
 
         newOrder.driver.delete_all_cookies()
 else:
