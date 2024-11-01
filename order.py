@@ -13,10 +13,10 @@ def check_url(url):
     request_response = requests.head(url)
     status_code = request_response.status_code
     if status_code == 200:
-        print("URL {0} is valid/up".format(url))
+        print("Meal {0} is available for order.".format(url))
         return True
     else:
-        print("URL {0} is invalid/down".format(url))
+        print("Meal {0} is not available".format(url))
         return False
 
 
@@ -25,9 +25,9 @@ class order:
     def __init__(self) -> None:
         service = Service()
         options = webdriver.ChromeOptions()
-        options.add_argument("--headless")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
+        # options.add_argument("--headless")
+        # options.add_argument("--no-sandbox")
+        # options.add_argument("--disable-dev-shm-usage")
         self.driver = webdriver.Chrome(service=service, options=options)
         
     def login(self, username, password):
@@ -47,10 +47,10 @@ class order:
             return False
 
     def is_order_free(self):
-            if "0.00₾" in self.driver.page_source:
+            if "0.00" in self.driver.page_source:
                 return True
             else:
-                print("Order sum is not 0 lari.")
+                print("The order cost more than 0 lari. Check sum of the order, it should be <= 15 lari to apply coupon.")
                 return False
 
     def clear_cart(self):
@@ -62,7 +62,7 @@ class order:
                 for u in hrefs:
                     url = self.driver.find_elements(By.CLASS_NAME , "remove")[0].get_attribute('href')
                     self.driver.get(url)
-                    print("Deleted item from cart.")
+                    print("An item was removed from the cart.")
             except StaleElementReferenceException:
                 return False
 
@@ -83,7 +83,7 @@ class order:
     def order_meals(self, meals):
         for url in meals:
             self.add_item_in_cart(url)
-            print("Added meal {0} to the cart".format(url))
+            print("Meal {0} has been added to the cart.".format(url))
         return  True
 
     def order_lunchboxes(self, lunchboxes):
@@ -92,7 +92,7 @@ class order:
                 if check_url(url):
                     self.driver.get(url)
                     self.add_item_in_cart(url)
-                    print("Added lunchbox {0} to the cart".format(url))
+                    print("Lunchbox {0} has been added to the cart".format(url))
                     return  True
             except NotFoundErr:
                 pass
@@ -100,8 +100,7 @@ class order:
 
     def submit_order(self):
         self.driver.get("https://foodpassonline.com/checkout-2/")  # Go to Cart
-        # if self.is_order_free():
-        if True:
+        if self.is_order_free():
             order_btn = self.driver.find_element(By.XPATH, '//*[@id="place_order"]')
             self.driver.execute_script("arguments[0].click();", order_btn)
             return  True
@@ -112,7 +111,7 @@ class order:
         current_date = datetime.datetime.now().strftime("%d %B %Y").lstrip('0')
 
         if current_date in self.driver.page_source:
-            print("Today user has already placed an order.")
+            print("The user has already ordered today.")
             return False
         else:
             # add any of the lunchboxes to the cart. If nothing is present, then adding a list of meals to the cart.
