@@ -4,10 +4,10 @@ It checks whether each user from `config.py` does not have an active order for t
 
 ## Example of the Config
 
-- username - login used for foodpassonline.com
-- password - password used for foodpassonline.com
-- lunchboxes: your favorite lunchbox, or lunchboxes. The script determines whether one of the URLs is available. It orders the first one that is available. The script uses the `meals` list if there isn't any:
-- meals -  A list of dishes to order. These are typically always listed on the website. The total price of all dishes should be less than 15 lari.
+- `username` - login used for foodpassonline.com
+- `password` - password used for foodpassonline.com
+- `lunchboxes`: your favorite lunchbox, or lunchboxes. The script determines whether one of the URLs is available. It orders the first one that is available. The script uses the `meals` list if there isn't any:
+- `meals` -  A list of dishes to order. These are typically always listed on the website. The total price of all dishes should be less than 15 lari.
 - 
 ```PYTHON
 userList = [
@@ -26,12 +26,20 @@ userList = [
 
 ## How To Run
 
-### Option 1: Build a Docker Container
+Setup `login`, `username`, `lunchboxes`, and `meals` in `config.py`. 
+### Option 1: With docker container
 
-    sudo docker build -t foodpass .
+Build it 
+```BASH
+sudo docker build -t foodpass .
+```
+
+And run. Your computer will process your orders while it is turned on.
+
+```
+sudo docker run --name foodpass foodpass
+```
+
 
 ### Option 2: Run Manually
-
-```BASH
-python3 makeOrders.py
-```
+#### TODO
