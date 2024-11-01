@@ -1,13 +1,8 @@
-from time import sleep
-
 import config
 import order
 import datetime
-import time 
-
 from datetime import datetime
 import pytz
-
 
 def allowed_order():
     my_tz = pytz.timezone("Asia/Tbilisi")
@@ -18,7 +13,9 @@ def allowed_order():
         is_allowed = False
         print("Current day of week {} is out  of order days (MON - FRI)".format(today))
     elif 22 > time_now.hour < 14:
+        is_allowed = False
         print("Current time {} is out  of order hours (14:00 - 22:00 GMT+4)".format(time_now))
+    return  is_allowed
 
 if allowed_order():
     for u in config.userList:
