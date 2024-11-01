@@ -1,3 +1,5 @@
+from time import sleep
+
 import config
 import order
 import datetime
@@ -20,6 +22,7 @@ if 10 <= time_now.hour < 24:
                 print("Order for {} is successfull".format(u.username))
             else:
                 print("Failed to make an order for {}".format(u.username))
+        sleep(1000)
 
         newOrder.driver.delete_all_cookies()
 else:
