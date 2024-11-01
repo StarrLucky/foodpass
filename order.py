@@ -25,9 +25,9 @@ class order:
     def __init__(self) -> None:
         service = Service()
         options = webdriver.ChromeOptions()
-        # options.add_argument("--headless")
-        # options.add_argument("--no-sandbox")
-        # options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--headless")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
         self.driver = webdriver.Chrome(service=service, options=options)
         
     def login(self, username, password):
