@@ -8,10 +8,19 @@ import time
 from datetime import datetime
 import pytz
 
-my_tz = pytz.timezone("Asia/Tbilisi") 
-time_now = datetime.now(my_tz)
 
-if 10 <= time_now.hour < 24:
+def allowed_order():
+    my_tz = pytz.timezone("Asia/Tbilisi")
+    time_now = datetime.now(my_tz)
+    today = datetime.today().weekday()
+    is_allowed = True
+    if today > 5:
+        is_allowed = False
+        print("Current day of week {} is out  of order days (MON - FRI)".format(today))
+    elif 22 > time_now.hour < 14:
+        print("Current time {} is out  of order hours (14:00 - 22:00 GMT+4)".format(time_now))
+
+if allowed_order():
     for u in config.userList:
         print("Ordering for {}".format(u.username))
         newOrder = order.order()
@@ -22,8 +31,4 @@ if 10 <= time_now.hour < 24:
                 print("Order for {} is successfull".format(u.username))
             else:
                 print("Failed to make an order for {}".format(u.username))
-        sleep(1000)
-
         newOrder.driver.delete_all_cookies()
-else:
-    print("Current time {} is out  of order hours (14:00 - 22:00 GMT+4)".format(time_now)  )
