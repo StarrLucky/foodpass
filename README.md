@@ -6,7 +6,7 @@ It checks whether each user from `config.py` does not have an active order for t
 
 - `username` - login used for foodpassonline.com
 - `password` - password used for foodpassonline.com
-- `lunchboxes`: your favorite lunchbox, or lunchboxes. The script determines whether one of the URLs is available. It orders the first one that is available. The script uses the `meals` list if there isn't any:
+- `lunchboxes`- your favorite lunchboxes. The script determines whether one of the URLs is available and orders it. The script uses the `meals` list if there isn't any:
 - `meals` -  A list of dishes to order. These are typically always listed on the website. The total price of all dishes should be less than 15 lari.
 - 
 ```PYTHON

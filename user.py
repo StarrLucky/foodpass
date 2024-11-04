@@ -1,8 +1,8 @@
 class user:
     username = ""
     password = ""
-    meals = []
     lunchboxes = []
+    meals = []
 
     def __init__(self, username, password, meals, lunchboxes) -> None:
         self.username = username

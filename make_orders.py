@@ -1,5 +1,5 @@
 import config
-import order
+import foodpass
 import datetime
 from datetime import datetime
 import pytz
@@ -18,14 +18,14 @@ def allowed_order():
     return  is_allowed
 
 if allowed_order():
+    food_pass = foodpass.FoodPass()
     for u in config.userList:
         print("Ordering for {}".format(u.username))
-        newOrder = order.order()
-        newOrder.login(u.username, u.password)
-        newOrder.clear_cart()
-        if newOrder.form_order(u.meals, u.lunchboxes):
-            if  newOrder.submit_order():
+        food_pass.login(u.username, u.password)
+        food_pass.clear_cart()
+        if food_pass.form_order(u.meals, u.lunchboxes):
+            if  food_pass.submit_order():
                 print("Order for {} is successfull".format(u.username))
             else:
                 print("Failed to make an order for {}".format(u.username))
-        newOrder.driver.delete_all_cookies()
+        food_pass.driver.delete_all_cookies()

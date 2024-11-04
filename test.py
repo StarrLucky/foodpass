@@ -1,10 +1,10 @@
 import unittest
-import order
+import foodpass
 import config
 
-browser = order.order()
+browser = foodpass.FoodPass()
 
-class IntegerArithmeticTestCase(unittest.TestCase):  
+class FoodPassTests(unittest.TestCase):
     
     def test_config(self):
         validConfig = True
@@ -21,8 +21,6 @@ class IntegerArithmeticTestCase(unittest.TestCase):
             validConfig = False
         
         self.assertTrue(validConfig, "Invalid Config.")
-    
-        
 
     def test_webdriverinit(self):        
         browser.driver.get("https://www.google.com/")
