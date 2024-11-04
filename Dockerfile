@@ -5,7 +5,7 @@ ADD foodpass.py ..
 ADD make_orders.py ..
 ADD user.py ..
 ADD requirements.txt .. 
-ADD crontab /etc/cron.d/hello-cron
+ADD crontab /etc/cron.d/foodpass-cron
 ADD Makefile ..
 
 RUN apt-get update && apt-get install python3 cron nano -y
@@ -26,8 +26,8 @@ RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
 # set display port to avoid crash
 ENV DISPLAY=:99
 
-RUN chmod 0644 /etc/cron.d/hello-cron
-RUN crontab /etc/cron.d/hello-cron
+RUN chmod 0644 /etc/cron.d/foodpass-cron
+RUN crontab /etc/cron.d/foodpass-cron
 RUN touch foodpass.log
 
 CMD cron && tail -f /foodpass.log
