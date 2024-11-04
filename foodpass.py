@@ -1,5 +1,4 @@
 from xml.dom import NotFoundErr
-
 from selenium.webdriver.common.by import By
 import datetime
 from selenium import webdriver
@@ -7,7 +6,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 import requests
-
 
 def check_url(url):
     request_response = requests.head(url)
@@ -19,17 +17,19 @@ def check_url(url):
         print("Meal {0} is not available".format(url))
         return False
 
-
-class order:
+class FoodPass:
     driver = None
     def __init__(self) -> None:
+        self.new_window()
+
+    def new_window(self):
         service = Service()
         options = webdriver.ChromeOptions()
         options.add_argument("--headless")
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
         self.driver = webdriver.Chrome(service=service, options=options)
-        
+
     def login(self, username, password):
         try:
             self.driver.get('https://foodpassonline.com/menuorder/')
@@ -68,7 +68,6 @@ class order:
 
         except NoSuchElementException:
             return False
-
 
     def add_item_in_cart(self, url):
         try:

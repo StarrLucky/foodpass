@@ -1,11 +1,12 @@
 FROM python:latest
 
 ADD config.py .. 
-ADD order.py ..
-ADD makeOrders.py .. 
+ADD foodpass.py ..
+ADD make_orders.py ..
 ADD user.py ..
 ADD requirements.txt .. 
 ADD crontab /etc/cron.d/hello-cron
+ADD Makefile ..
 
 RUN apt-get update && apt-get install python3 cron nano -y
 RUN pip3 install -r requirements.txt  --break-system-packages
@@ -20,7 +21,7 @@ RUN wget --no-verbose -O /tmp/chrome.deb https://mirror.cs.uchicago.edu/google-c
   && rm /tmp/chrome.deb 
 # install chromedriver
 RUN apt-get install -yqq unzip
-RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
+RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
 RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
 # set display port to avoid crash
 ENV DISPLAY=:99
