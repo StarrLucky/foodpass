@@ -34,7 +34,7 @@ Build it
 sudo docker build -t foodpass .
 ```
 
-And run. Your computer will process your orders while it is turned on.
+While the Docker service is running, your computer will process your orders.
 
 ```
 sudo docker run --name foodpass foodpass
@@ -42,4 +42,24 @@ sudo docker run --name foodpass foodpass
 
 
 ### Option 2: Run Manually
-#### TODO
+
+2.1 Install: 
+
+```BASH 
+make install
+```
+
+2.2
+Run a test to place the order for today: 
+
+```BASH 
+make orders
+```
+
+2.3 Set up a scheduled job to execute this script at 19:00 daily:
+- Run the script after changing the `/home/username/foodpass` path to your own:
+- 
+```BASH
+(crontab -l ; echo "00 19 * * *  cd /home/username/foodpass; make orders") | crontab 
+
+```
