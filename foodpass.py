@@ -7,6 +7,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 import requests
 
+
 def check_url(url):
     request_response = requests.head(url)
     status_code = request_response.status_code
@@ -17,8 +18,10 @@ def check_url(url):
         print("Meal {0} is not available".format(url))
         return False
 
+
 class FoodPass:
     driver = None
+
     def __init__(self) -> None:
         self.new_window()
 
@@ -43,24 +46,23 @@ class FoodPass:
                 return True
             else:
                 return False
-        except NoSuchElementException: 
+        except NoSuchElementException:
             return False
 
     def is_order_free(self):
-            if "0.00" in self.driver.page_source:
-                return True
-            else:
-                print("The order cost more than 0 lari. Check sum of the order, it should be <= 15 lari to apply coupon.")
-                return False
+        if "0.00" in self.driver.page_source:
+            return True
+        else:
+            print("The order cost more than 0 lari. Check sum of the order, it should be <= 15 lari to apply coupon.")
+            return False
 
     def clear_cart(self):
         try:
             self.driver.get('https://foodpassonline.com/%D0%BA%D0%BE%D1%80%D0%B7%D0%B8%D0%BD%D0%B0/')
-            hrefs = self.driver.find_elements(By.CLASS_NAME , "remove")
-            print(hrefs)
+            hrefs = self.driver.find_elements(By.CLASS_NAME, "remove")
             try:
                 for u in hrefs:
-                    url = self.driver.find_elements(By.CLASS_NAME , "remove")[0].get_attribute('href')
+                    url = self.driver.find_elements(By.CLASS_NAME, "remove")[0].get_attribute('href')
                     self.driver.get(url)
                     print("An item was removed from the cart.")
             except StaleElementReferenceException:
@@ -73,8 +75,9 @@ class FoodPass:
         try:
             if check_url(url):
                 self.driver.get(url)
-                self.driver.find_element(By.XPATH, '//*[@id="wp--skip-link--target"]/div/div/div[1]/div[3]/div[2]/div[3]/form/button').click()
-                return  True
+                self.driver.find_element(By.XPATH,
+                                         '//*[@id="wp--skip-link--target"]/div/div/div[1]/div[3]/div[2]/div[3]/form/button').click()
+                return True
         except NoSuchElementException:
             pass
         return False
@@ -83,7 +86,7 @@ class FoodPass:
         for url in meals:
             self.add_item_in_cart(url)
             print("Meal {0} has been added to the cart.".format(url))
-        return  True
+        return True
 
     def order_lunchboxes(self, lunchboxes):
         for url in lunchboxes:
@@ -92,7 +95,7 @@ class FoodPass:
                     self.driver.get(url)
                     self.add_item_in_cart(url)
                     print("Lunchbox {0} has been added to the cart".format(url))
-                    return  True
+                    return True
             except NotFoundErr:
                 pass
         return False
@@ -102,7 +105,7 @@ class FoodPass:
         if self.is_order_free():
             order_btn = self.driver.find_element(By.XPATH, '//*[@id="place_order"]')
             self.driver.execute_script("arguments[0].click();", order_btn)
-            return  True
+            return True
         return False
 
     def form_order(self, meals, lunchboxes):
@@ -115,9 +118,8 @@ class FoodPass:
         else:
             # add any of the lunchboxes to the cart. If nothing is present, then adding a list of meals to the cart.
             if self.order_lunchboxes(lunchboxes):
-                return  True
+                return True
             elif self.order_meals(meals):
-                return  True
+                return True
             else:
-                return  False
-
+                return False
