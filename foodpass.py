@@ -1,16 +1,15 @@
 from xml.dom import NotFoundErr
 from selenium.webdriver.common.by import By
-import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 import requests
-from datetime import datetime
+import datetime
 import pytz
 
 my_tz = pytz.timezone("Asia/Tbilisi")
-time_now = datetime.now(my_tz)
+time_now = datetime.datetime.now(my_tz)
 
 def check_url(url):
     request_response = requests.head(url)
@@ -32,9 +31,9 @@ class FoodPass:
     def new_window(self):
         service = Service()
         options = webdriver.ChromeOptions()
-        options.add_argument("--headless")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
+        # options.add_argument("--headless")
+        # options.add_argument("--no-sandbox")
+        # options.add_argument("--disable-dev-shm-usage")
         self.driver = webdriver.Chrome(service=service, options=options)
 
     def login(self, username, password):
@@ -46,10 +45,9 @@ class FoodPass:
             input_password.send_keys(password)
             login_btn = self.driver.find_element(By.XPATH, '//*[@id="customer_login"]/div[1]/form/p[3]/button')
             login_btn.click()
-            if len(self.driver.page_source) > 0:
+            if "Hello" in self.driver.page_source:
                 return True
             else:
-                print("{0} Login failed.".format(time_now))
                 return False
         except NoSuchElementException:
             return False
@@ -72,9 +70,9 @@ class FoodPass:
                     print("{0} An item was removed from the cart.".format(time_now))
             except StaleElementReferenceException:
                 return False
-
         except NoSuchElementException:
             return False
+        return True
 
     def add_item_in_cart(self, url):
         try:
@@ -109,7 +107,7 @@ class FoodPass:
         self.driver.get("https://foodpassonline.com/checkout-2/")  # Go to Cart
         if self.is_order_free():
             order_btn = self.driver.find_element(By.XPATH, '//*[@id="place_order"]')
-            self.driver.execute_script("arguments[0].click();", order_btn)
+            # self.driver.execute_script("arguments[0].click();", order_btn)
             return True
         return False
 
