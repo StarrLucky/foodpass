@@ -11,6 +11,7 @@ import pytz
 my_tz = pytz.timezone("Asia/Tbilisi")
 time_now = datetime.datetime.now(my_tz)
 
+
 def check_url(url):
     request_response = requests.head(url)
     status_code = request_response.status_code
@@ -54,11 +55,14 @@ class FoodPass:
 
     def is_order_free(self):
         try:
-            amount = self.driver.find_element(By.XPATH, '//*[@id="order_review"]/table/tfoot/tr[3]/td/strong/span/bdi').text
+            amount = self.driver.find_element(By.XPATH,
+                                              '//*[@id="order_review"]/table/tfoot/tr[3]/td/strong/span/bdi').text
             if "0.00₾" in amount:
                 return True
             else:
-                print("{0}: The order cost is {1}. Check sum of the order, it should be <= 15 lari to apply coupon.".format(time_now, amount))
+                print(
+                    "{0}: The order cost is {1}. Check sum of the order, it should be <= 15 lari to apply coupon.".format(
+                        time_now, amount))
                 return False
         except NoSuchElementException:
             return False
