@@ -9,7 +9,6 @@ class user:
         self.password = password
         self.meals = meals
         self.lunchboxes = lunchboxes
-    
+
     def test(self):
         print(self.meals)
-
