@@ -6,6 +6,7 @@ import pytz
 my_tz = pytz.timezone("Asia/Tbilisi")
 time_now = datetime.datetime.now(my_tz)
 
+
 def allowed_order():
     today = datetime.datetime.today().weekday()
     is_allowed = True
@@ -15,13 +16,14 @@ def allowed_order():
     elif 22 > time_now.hour < 14:
         is_allowed = False
         print("{0}: Current time is out of order hours (14:00 - 22:00 GMT+4)".format(time_now))
-    return  is_allowed
+    return is_allowed
+
 
 if allowed_order():
     food_pass = foodpass.FoodPass()
     for u in config.userList:
         print("{0}: Ordering for {1}".format(time_now, u.username))
-        if  not food_pass.login(u.username, u.password):
+        if not food_pass.login(u.username, u.password):
             print("{0} Login for {1} failed.".format(time_now, u.username))
             break
         if not food_pass.clear_cart():
