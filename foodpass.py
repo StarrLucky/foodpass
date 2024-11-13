@@ -1,21 +1,24 @@
 from xml.dom import NotFoundErr
 from selenium.webdriver.common.by import By
-import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 import requests
+import datetime
+import pytz
 
+my_tz = pytz.timezone("Asia/Tbilisi")
+time_now = datetime.datetime.now(my_tz)
 
 def check_url(url):
     request_response = requests.head(url)
     status_code = request_response.status_code
     if status_code == 200:
-        print("Meal {0} is available for order.".format(url))
+        print("{0}: Meal {1} is available for order.".format(time_now, url))
         return True
     else:
-        print("Meal {0} is not available".format(url))
+        print("{0}: Meal {1} is not available".format(time_now, url))
         return False
 
 
@@ -42,7 +45,7 @@ class FoodPass:
             input_password.send_keys(password)
             login_btn = self.driver.find_element(By.XPATH, '//*[@id="customer_login"]/div[1]/form/p[3]/button')
             login_btn.click()
-            if len(self.driver.page_source) > 0:
+            if "Hello" in self.driver.page_source:
                 return True
             else:
                 return False
@@ -50,10 +53,14 @@ class FoodPass:
             return False
 
     def is_order_free(self):
-        if "0.00" in self.driver.page_source:
-            return True
-        else:
-            print("The order cost more than 0 lari. Check sum of the order, it should be <= 15 lari to apply coupon.")
+        try:
+            amount = self.driver.find_element(By.XPATH, '//*[@id="order_review"]/table/tfoot/tr[3]/td/strong/span/bdi').text
+            if "0.00₾" in amount:
+                return True
+            else:
+                print("{0}: The order cost is {1}. Check sum of the order, it should be <= 15 lari to apply coupon.".format(time_now, amount))
+                return False
+        except NoSuchElementException:
             return False
 
     def clear_cart(self):
@@ -64,12 +71,12 @@ class FoodPass:
                 for u in hrefs:
                     url = self.driver.find_elements(By.CLASS_NAME, "remove")[0].get_attribute('href')
                     self.driver.get(url)
-                    print("An item was removed from the cart.")
+                    print("{0} An item was removed from the cart.".format(time_now))
             except StaleElementReferenceException:
                 return False
-
         except NoSuchElementException:
             return False
+        return True
 
     def add_item_in_cart(self, url):
         try:
@@ -85,7 +92,7 @@ class FoodPass:
     def order_meals(self, meals):
         for url in meals:
             self.add_item_in_cart(url)
-            print("Meal {0} has been added to the cart.".format(url))
+            print("{0}: Meal {1} has been added to the cart.".format(time_now, url))
         return True
 
     def order_lunchboxes(self, lunchboxes):
@@ -94,7 +101,7 @@ class FoodPass:
                 if check_url(url):
                     self.driver.get(url)
                     self.add_item_in_cart(url)
-                    print("Lunchbox {0} has been added to the cart".format(url))
+                    print("{0}: Lunchbox {1} has been added to the cart".format(time_now, url))
                     return True
             except NotFoundErr:
                 pass
@@ -111,12 +118,10 @@ class FoodPass:
     def form_order(self, meals, lunchboxes):
         self.driver.get('https://foodpassonline.com/login-2/orders/')
         current_date = datetime.datetime.now().strftime("%d %B %Y").lstrip('0')
-
         if current_date in self.driver.page_source:
-            print("The user has already ordered today.")
+            print("{0}: The user has already ordered today.".format(time_now))
             return False
         else:
-            # add any of the lunchboxes to the cart. If nothing is present, then adding a list of meals to the cart.
             if self.order_lunchboxes(lunchboxes):
                 return True
             elif self.order_meals(meals):
