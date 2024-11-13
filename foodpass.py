@@ -31,9 +31,9 @@ class FoodPass:
     def new_window(self):
         service = Service()
         options = webdriver.ChromeOptions()
-        # options.add_argument("--headless")
-        # options.add_argument("--no-sandbox")
-        # options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--headless")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
         self.driver = webdriver.Chrome(service=service, options=options)
 
     def login(self, username, password):
@@ -53,10 +53,14 @@ class FoodPass:
             return False
 
     def is_order_free(self):
-        if "0.00" in self.driver.page_source:
-            return True
-        else:
-            print("{0}: The order cost more than 0 lari. Check sum of the order, it should be <= 15 lari to apply coupon.".format(time_now))
+        try:
+            amount = self.driver.find_element(By.XPATH, '//*[@id="order_review"]/table/tfoot/tr[3]/td/strong/span/bdi').text
+            if "0.00₾" in amount:
+                return True
+            else:
+                print("{0}: The order cost is {1}. Check sum of the order, it should be <= 15 lari to apply coupon.".format(time_now, amount))
+                return False
+        except NoSuchElementException:
             return False
 
     def clear_cart(self):
@@ -107,19 +111,17 @@ class FoodPass:
         self.driver.get("https://foodpassonline.com/checkout-2/")  # Go to Cart
         if self.is_order_free():
             order_btn = self.driver.find_element(By.XPATH, '//*[@id="place_order"]')
-            # self.driver.execute_script("arguments[0].click();", order_btn)
+            self.driver.execute_script("arguments[0].click();", order_btn)
             return True
         return False
 
     def form_order(self, meals, lunchboxes):
         self.driver.get('https://foodpassonline.com/login-2/orders/')
         current_date = datetime.datetime.now().strftime("%d %B %Y").lstrip('0')
-
         if current_date in self.driver.page_source:
             print("{0}: The user has already ordered today.".format(time_now))
             return False
         else:
-            # add any of the lunchboxes to the cart. If nothing is present, then adding a list of meals to the cart.
             if self.order_lunchboxes(lunchboxes):
                 return True
             elif self.order_meals(meals):
