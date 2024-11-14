@@ -7,24 +7,16 @@ ADD user.py ..
 ADD requirements.txt .. 
 ADD crontab /etc/cron.d/foodpass-cron
 ADD Makefile ..
+ADD bin bin
 
-RUN apt-get update && apt-get install python3 cron nano jq unzip -y
+RUN apt-get update && apt-get install cron nano unzip -y
 RUN pip3 install -r requirements.txt  --break-system-packages
 
-# Install Chrome
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-RUN echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | tee /etc/apt/sources.list.d/google-chrome.list
-apt update -y
-apt install -y gconf-service libasound2 libatk1.0-0 libcairo2 libcups2 libfontconfig1 libgdk-pixbuf2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libxss1 fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils
-apt install -y google-chrome-stable \
-
+# Install chrome 114 chrome that supports webdriver and selenuim withoud headache
+RUN apt-get install -y ./bin/google-chrome-stable_114.0.5735.106-1_amd64.deb
 # Install chromedriver
-RUN CHROMEDRIVER_URL='https://storage.googleapis.com/chrome-for-testing-public/132.0.6833.0/linux64/chromedriver-linux64.zip' \
-    && curl -sSLf --retry 3 --output /tmp/chromedriver-linux64.zip "$CHROMEDRIVER_URL" \
-    && unzip -o /tmp/chromedriver-linux64.zip -d /tmp \
-    && rm -rf /tmp/chromedriver-linux64.zip \
-    && mv -f /tmp/chromedriver-linux64/chromedriver "/usr/local/bin/chromedriver" \
-    && chmod +x "/usr/local/bin/chromedriver"
+RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
+RUN unzip /bin/chromedriver_linux64.zip chromedriver -d /usr/local/bin/
 
 # set display port to avoid crash
 ENV DISPLAY=:99
