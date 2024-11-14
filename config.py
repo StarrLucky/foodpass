@@ -1,5 +1,7 @@
 import user as users
 
+import user as users
+
 userList = [
     users.user(
         username="User",
