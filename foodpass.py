@@ -55,9 +55,10 @@ class FoodPass:
 
     def is_order_free(self):
         try:
+            self.driver.get("https://foodpassonline.com/checkout-2/")  # Go to Cart
             amount = self.driver.find_element(By.XPATH,
-                                              '//*[@id="order_review"]/table/tfoot/tr[3]/td/strong/span/bdi').text
-            if "0.00₾" in amount:
+                                              '//*[@id="order_review"]/table/tfoot/tr[3]/td/strong/span').text
+            if "0.00" in amount:
                 return True
             else:
                 print(
@@ -112,7 +113,6 @@ class FoodPass:
         return False
 
     def submit_order(self):
-        self.driver.get("https://foodpassonline.com/checkout-2/")  # Go to Cart
         if self.is_order_free():
             order_btn = self.driver.find_element(By.XPATH, '//*[@id="place_order"]')
             self.driver.execute_script("arguments[0].click();", order_btn)
