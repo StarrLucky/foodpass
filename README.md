@@ -36,8 +36,8 @@ sudo docker build -t foodpass .
 
 While the Docker service is running, your computer will process your orders.
 
-```
-sudo docker run --name foodpass foodpass
+```BASH
+sudo docker run  -v $(pwd)/config.py:/config.py --name=foodpass foodpass 
 ```
 
 
