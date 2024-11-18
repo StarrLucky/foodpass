@@ -42,7 +42,7 @@ Setup `login`, `username`, `lunchboxes`, and `meals` in `config.py`.
 1.1 Pull container and run it:
 
 ```BASH
-sudo docker run -v $(pwd)/config.py:/config.py --name=foodpass starrlucky/foodpass:foodpass_amd64
+sudo docker run -v $(pwd)/config.py:/config.py  --restart=always --name=foodpass starrlucky/foodpass:foodpass_amd64
 ```
 
 ### Option 2: Manually
