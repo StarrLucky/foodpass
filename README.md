@@ -35,7 +35,7 @@ userList = [
 
 ## How To Run
 
-Setup `login`, `username`, `lunchboxes`, and `meals` in `config.py`. 
+Setup `login`, `username`, `lunchboxes`, and `meals` in `config.py` for one or several users.
 
 ### Option 1: With docker container
 
