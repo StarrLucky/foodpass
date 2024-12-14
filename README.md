@@ -61,9 +61,9 @@ make orders
 ```
 
 2.3 Set up a scheduled job to execute this script at 19:00 daily:
-- Run the script after changing the `/home/username/foodpass` path to your own:
+
+Run the script after changing the `/home/username/foodpass` path to your own:
 
 ```BASH
 (crontab -l ; echo "00 19 * * *  cd /home/username/foodpass; make orders") | crontab 
-
 ```
