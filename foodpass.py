@@ -39,7 +39,7 @@ class FoodPass:
 
     def login(self, username, password):
         try:
-            self.driver.get('https://foodpassonline.com/menuorder/')
+            self.driver.get('https://foodpassonline.com/login-2/')
             input_username = self.driver.find_element(By.XPATH, '//*[@id="username"]')
             input_username.send_keys(username)
             input_password = self.driver.find_element(By.XPATH, '//*[@id="password"]')
