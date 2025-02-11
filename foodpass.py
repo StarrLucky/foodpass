@@ -1,3 +1,4 @@
+from time import sleep
 from xml.dom import NotFoundErr
 from selenium.webdriver.common.by import By
 from selenium import webdriver
@@ -32,7 +33,7 @@ class FoodPass:
     def new_window(self):
         service = Service()
         options = webdriver.ChromeOptions()
-        options.add_argument("--headless")
+        # options.add_argument("--headless")
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
         self.driver = webdriver.Chrome(service=service, options=options)
@@ -40,13 +41,13 @@ class FoodPass:
     def login(self, username, password):
         try:
             self.driver.get('https://foodpassonline.com/login-2/')
-            input_username = self.driver.find_element(By.XPATH, '//*[@id="username"]')
+            input_username = self.driver.find_element(By.XPATH, '//*[@id="post-1739"]/div/div/div[2]/div[2]/div[2]/div/form/div[1]/div[1]/div/input')
             input_username.send_keys(username)
-            input_password = self.driver.find_element(By.XPATH, '//*[@id="password"]')
+            input_password = self.driver.find_element(By.XPATH, '//*[@id="post-1739"]/div/div/div[2]/div[2]/div[2]/div/form/div[1]/div[2]/div/input')
             input_password.send_keys(password)
-            login_btn = self.driver.find_element(By.XPATH, '//*[@id="customer_login"]/div[1]/form/p[3]/button')
+            login_btn = self.driver.find_element(By.XPATH, '//*[@id="post-1739"]/div/div/div[2]/div[2]/div[2]/div/form/button')
             login_btn.click()
-            if "Hello" in self.driver.page_source:
+            if "Hello" or "successful" in self.driver.page_source:
                 return True
             else:
                 return False
@@ -71,7 +72,10 @@ class FoodPass:
     def clear_cart(self):
         try:
             self.driver.get('https://foodpassonline.com/%D0%BA%D0%BE%D1%80%D0%B7%D0%B8%D0%BD%D0%B0/')
-            hrefs = self.driver.find_elements(By.CLASS_NAME, "remove")
+
+            hrefs = self.driver.find_elements(By.PARTIAL_LINK_TEXT, 'remove')
+
+
             try:
                 for u in hrefs:
                     url = self.driver.find_elements(By.CLASS_NAME, "remove")[0].get_attribute('href')
