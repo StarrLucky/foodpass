@@ -1,4 +1,4 @@
-import config
+import config as config
 import foodpass
 import datetime
 import pytz
@@ -32,7 +32,7 @@ if allowed_order():
         if not food_pass.form_order(u.meals, u.lunchboxes):
             break
         if food_pass.submit_order():
-            print("{0}: Order for {1} is successfull".format(time_now, u.username))
+            print("{0}: Order for {1} is successful".format(time_now, u.username))
         else:
             print("{0}: Failed to make an order for {1}".format(time_now, u.username))
 
