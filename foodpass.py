@@ -8,6 +8,8 @@ from selenium.common.exceptions import StaleElementReferenceException
 import requests
 import datetime
 import pytz
+import pages.login_page
+from pages.login_page import LoginPage
 
 my_tz = pytz.timezone("Asia/Tbilisi")
 time_now = datetime.datetime.now(my_tz)
@@ -40,18 +42,8 @@ class FoodPass:
 
     def login(self, username, password):
         try:
-            self.driver.get('https://foodpassonline.com/login-2/')
-            input_username = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/main/div/article/div/div/div[2]/div/div[1]/div/div/div[2]/div[2]/div/form/div[1]/div[1]/div/input')
-            input_username.send_keys(username)
-            input_password = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/main/div/article/div/div/div[2]/div/div[1]/div/div/div[2]/div[2]/div/form/div[1]/div[2]/div/input')
-            input_password.send_keys(password)
-            login_btn = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/main/div/article/div/div/div[2]/div/div[1]/div/div/div[2]/div[2]/div/form/button')
-            login_btn.click()
-            sleep(10)
-            if "Hello" or "successful" in self.driver.page_source:
-                return True
-            else:
-                return False
+            login_page = LoginPage(self.driver)
+            login_page.login(username = username, password = password)
         except NoSuchElementException:
             return False
 
