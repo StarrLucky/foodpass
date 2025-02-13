@@ -7,7 +7,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 from pages.login_page import LoginPage
 from pages.checkout_page import CheckoutPage
-
+from pages.cart_page import CartPage
 import requests
 import datetime
 import pytz
@@ -28,10 +28,14 @@ def check_url(url):
 
 
 class FoodPass:
-    driver = None
+    driver        = None
+    cart_page     = None
+    checkout_page = None
 
     def __init__(self) -> None:
         self.new_window()
+        cart_page     = CartPage(self.driver)
+        checkout_page = CheckoutPage(self.driver)
 
     def new_window(self):
         service = Service()
@@ -50,8 +54,8 @@ class FoodPass:
 
     def is_order_free(self):
         try:
-            checkout_page = CheckoutPage(self.driver)
-            amount = checkout_page.get_order_price()
+
+            amount = self.checkout_page.get_order_price()
             if "0.00" in amount:
                 return True
             else:
@@ -82,9 +86,7 @@ class FoodPass:
     def add_item_in_cart(self, url):
         try:
             if check_url(url):
-                self.driver.get(url)
-                self.driver.find_element(By.XPATH,
-                                         '//*[@id="wp--skip-link--target"]/div/div/div[1]/div[3]/div[2]/div[3]/form/button').click()
+                self.cart_page.add_to_cart(url) # TODO: check status
                 return True
         except NoSuchElementException:
             pass
