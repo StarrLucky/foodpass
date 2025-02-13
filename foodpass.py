@@ -91,8 +91,10 @@ class FoodPass:
         try:
             if check_url(url):
                 self.driver.get(url)
+                sleep(1)
                 self.driver.find_element(By.XPATH,
-                                         '//*[@id="wp--skip-link--target"]/div/div/div[1]/div[3]/div[2]/div[3]/form/button').click()
+                                         '/html/body/div[1]/div/div/div/main/div[3]/div[2]/form/button').click()
+                sleep(1)
                 return True
         except NoSuchElementException:
             pass
