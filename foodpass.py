@@ -8,6 +8,7 @@ from selenium.common.exceptions import StaleElementReferenceException
 from pages.login_page import LoginPage
 from pages.checkout_page import CheckoutPage
 from pages.cart_page import CartPage
+from pages.orders_page import OrdersPage
 import requests
 import datetime
 import pytz
@@ -31,11 +32,13 @@ class FoodPass:
     driver        = None
     cart_page     = None
     checkout_page = None
+    orders_page   = None
 
     def __init__(self) -> None:
         self.new_window()
-        cart_page     = CartPage(self.driver)
-        checkout_page = CheckoutPage(self.driver)
+        self.cart_page     = CartPage(self.driver)
+        self.checkout_page = CheckoutPage(self.driver)
+        self.orders_page   = OrdersPage(self.driver)
 
     def new_window(self):
         service = Service()
@@ -54,7 +57,6 @@ class FoodPass:
 
     def is_order_free(self):
         try:
-
             amount = self.checkout_page.get_order_price()
             if "0.00" in amount:
                 return True
@@ -68,12 +70,12 @@ class FoodPass:
 
     def clear_cart(self):
         try:
-            self.driver.get('https://foodpassonline.com/%D0%BA%D0%BE%D1%80%D0%B7%D0%B8%D0%BD%D0%B0/')
+            self.driver.get(self.cart_page.locator.CART_PAGE_URL)
             sleep(5)
-            hrefs = self.driver.find_elements(By.CLASS_NAME, "remove")
+            hrefs = self.driver.find_elements(*self.cart_page.locator.REMOVE_BUTTON)
             try:
                 for u in hrefs:
-                    url = self.driver.find_elements(By.CLASS_NAME, "remove")[0].get_attribute('href')
+                    url = self.driver.find_elements(*self.cart_page.locator.REMOVE_BUTTON)[0].get_attribute('href')
                     self.driver.get(url)
                     sleep(1)
                     print("{0} An item was removed from the cart.".format(time_now))
@@ -83,7 +85,7 @@ class FoodPass:
             return False
         return True
 
-    def add_item_in_cart(self, url):
+    def __add_item_in_cart(self, url):
         try:
             if check_url(url):
                 self.cart_page.add_to_cart(url) # TODO: check status
@@ -94,7 +96,7 @@ class FoodPass:
 
     def order_meals(self, meals):
         for url in meals:
-            self.add_item_in_cart(url)
+            self.__add_item_in_cart(url)
             print("{0}: Meal {1} has been added to the cart.".format(time_now, url))
         return True
 
@@ -103,7 +105,7 @@ class FoodPass:
             try:
                 if check_url(url):
                     self.driver.get(url)
-                    self.add_item_in_cart(url)
+                    self.__add_item_in_cart(url)
                     print("{0}: Lunchbox {1} has been added to the cart".format(time_now, url))
                     return True
             except NotFoundErr:
@@ -118,7 +120,7 @@ class FoodPass:
         return False
 
     def form_order(self, meals, lunchboxes):
-        self.driver.get('https://foodpassonline.com/login-2/orders/')
+        self.driver.get(self.orders_page.locator.ORDERS_PAGE_URL)
         current_date = datetime.datetime.now().strftime("%d %B %Y").lstrip('0')
         if current_date in self.driver.page_source:
             print("{0}: The user has already ordered today.".format(time_now))

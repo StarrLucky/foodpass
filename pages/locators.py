@@ -13,3 +13,7 @@ class CheckoutPageLocators(object):
 class CartPageLocators(object):
     CART_PAGE_URL      = 'https://foodpassonline.com/checkout-2/'
     ADD_TO_CART_BUTTON = (By.XPATH, '//*[@id="wp--skip-link--target"]/div/div/div[1]/div[3]/div[2]/div[3]/form/button')
+    REMOVE_BUTTON      = (By.CLASS_NAME, "remove")
+
+class OrdersPageLocators(object):
+    ORDERS_PAGE_URL      = 'https://foodpassonline.com/login-2/orders/'
