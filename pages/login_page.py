@@ -1,11 +1,10 @@
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 
 from pages.locators import *
 
-class LoginPage(webdriver):
+class LoginPage:
     def __init__(self, driver):
         self.driver = driver
         self.locator = LoginPageLocators
@@ -27,15 +26,14 @@ class LoginPage(webdriver):
         self.wait_for_element(self.locator.LOGIN_BUTTON)
         self.driver.find_element(*self.locator.LOGIN_BUTTON).click()
 
+    def is_logged_in(self):
+        return "Hello" in self.driver.page_source or "successful" in self.driver.page_source
 
     def login(self, username, password):
-        self.driver.get('https://foodpassonline.com/login-2/')
+        self.driver.get(self.locator.LOGIN_PAGE_URL)
         self.enter_username(username), self.enter_password(password)
         self.click_login()
-        if "Hello" or "successful" in self.driver.page_source:
-            return True
-        else:
-            return False
+        return  self.is_logged_in()
 
     def login_with_valid_user(self):
         self.login("foodguessr", "mtsvadiminda")

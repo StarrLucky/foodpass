@@ -5,15 +5,16 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
+from pages.login_page import LoginPage
+
+
 import requests
 import datetime
 import pytz
-import pages.login_page
-from pages.login_page import LoginPage
+
 
 my_tz = pytz.timezone("Asia/Tbilisi")
 time_now = datetime.datetime.now(my_tz)
-
 
 def check_url(url):
     request_response = requests.head(url)
@@ -43,7 +44,7 @@ class FoodPass:
     def login(self, username, password):
         try:
             login_page = LoginPage(self.driver)
-            login_page.login(username = username, password = password)
+            return login_page.login(username = username, password = password)
         except NoSuchElementException:
             return False
 

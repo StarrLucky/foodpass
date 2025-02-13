@@ -1,7 +1,11 @@
 from selenium.webdriver.common.by import By
 
-
 class LoginPageLocators(object):
-    USERNAME     = (By.XPATH, '/html/body/div[1]/div/div/div/main/div/article/div/div/div[2]/div/div[1]/div/div/div[2]/div[2]/div/form/div[1]/div[1]/div/input')
-    PASSWORD     = (By.XPATH, '/html/body/div[1]/div/div/div/main/div/article/div/div/div[2]/div/div[1]/div/div/div[2]/div[2]/div/form/div[1]/div[2]/div/input')
-    LOGIN_BUTTON = (By.XPATH, '/html/body/div[1]/div/div/div/main/div/article/div/div/div[2]/div/div[1]/div/div/div[2]/div[2]/div/form/button')
+    LOGIN_PAGE_URL = 'https://foodpassonline.com/login-2/'
+    USERNAME       = (By.XPATH, '/html/body/div[1]/div/div/div/main/div/article/div/div/div[2]/div/div[1]/div/div/div[2]/div[2]/div/form/div[1]/div[1]/div/input')
+    PASSWORD       = (By.XPATH, '/html/body/div[1]/div/div/div/main/div/article/div/div/div[2]/div/div[1]/div/div/div[2]/div[2]/div/form/div[1]/div[2]/div/input')
+    LOGIN_BUTTON   = (By.XPATH, '/html/body/div[1]/div/div/div/main/div/article/div/div/div[2]/div/div[1]/div/div/div[2]/div[2]/div/form/button')
+
+class CheckoutPageLocators(object):
+    CHECKOUT_PAGE_URL = 'https://foodpassonline.com/checkout-2/'
+    AMOUNT_TEXT       = (By.XPATH, '//*[@id="order_review"]/table/tfoot/tr[3]/td/strong/span')
