@@ -9,3 +9,7 @@ class LoginPageLocators(object):
 class CheckoutPageLocators(object):
     CHECKOUT_PAGE_URL = 'https://foodpassonline.com/checkout-2/'
     AMOUNT_TEXT       = (By.XPATH, '//*[@id="order_review"]/table/tfoot/tr[3]/td/strong/span')
+
+class CartPageLocators(object):
+    CART_PAGE_URL      = 'https://foodpassonline.com/checkout-2/'
+    ADD_TO_CART_BUTTON = (By.XPATH, '//*[@id="wp--skip-link--target"]/div/div/div[1]/div[3]/div[2]/div[3]/form/button')
