@@ -17,3 +17,6 @@ class CartPage:
         self.driver.get(url)
         self.__wait_for_element(self.locator.ADD_TO_CART_BUTTON)
         self.driver.find_element(self.locator.ADD_TO_CART_BUTTON).click()
+
+    def __clear_cart_item(self, url):
+        pass
