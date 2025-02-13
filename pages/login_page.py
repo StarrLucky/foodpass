@@ -9,21 +9,21 @@ class LoginPage:
         self.driver = driver
         self.locator = LoginPageLocators
 
-    def wait_for_element(self, element):
+    def __wait_for_element(self, element):
         WebDriverWait(self.driver, 5).until(
             EC.presence_of_element_located(element)
         )
 
     def enter_username(self, username):
-        self.wait_for_element(self.locator.USERNAME)
+        self.__wait_for_element(self.locator.USERNAME)
         self.driver.find_element(*self.locator.USERNAME).send_keys(username)
 
     def enter_password(self, password):
-        self.wait_for_element(self.locator.PASSWORD)
+        self.__wait_for_element(self.locator.PASSWORD)
         self.driver.find_element(*self.locator.PASSWORD).send_keys(password)
 
     def click_login(self):
-        self.wait_for_element(self.locator.LOGIN_BUTTON)
+        self.__wait_for_element(self.locator.LOGIN_BUTTON)
         self.driver.find_element(*self.locator.LOGIN_BUTTON).click()
 
     def is_logged_in(self):

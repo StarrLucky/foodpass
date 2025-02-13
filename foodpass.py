@@ -6,7 +6,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 from pages.login_page import LoginPage
-
+from pages.checkout_page import CheckoutPage
 
 import requests
 import datetime
@@ -50,9 +50,8 @@ class FoodPass:
 
     def is_order_free(self):
         try:
-            self.driver.get("https://foodpassonline.com/checkout-2/")  # Go to Cart
-            amount = self.driver.find_element(By.XPATH,
-                                              '//*[@id="order_review"]/table/tfoot/tr[3]/td/strong/span').text
+            checkout_page = CheckoutPage(self.driver)
+            amount = checkout_page.get_order_price()
             if "0.00" in amount:
                 return True
             else:
