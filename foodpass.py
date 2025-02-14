@@ -114,9 +114,8 @@ class FoodPass:
 
     def submit_order(self):
         if self.is_order_free():
-            order_btn = self.driver.find_element(By.XPATH, '//*[@id="place_order"]')
-            self.driver.execute_script("arguments[0].click();", order_btn)
-            return True
+            self.checkout_page.submit_order()
+            return True # TODO: status
         return False
 
     def form_order(self, meals, lunchboxes):
