@@ -9,6 +9,7 @@ class LoginPageLocators(object):
 class CheckoutPageLocators(object):
     CHECKOUT_PAGE_URL = 'https://foodpassonline.com/checkout-2/'
     AMOUNT_TEXT       = (By.XPATH, '//*[@id="order_review"]/table/tfoot/tr[3]/td/strong/span')
+    ORDER_BUTTON      = (By.XPATH, '//*[@id="place_order"]')
 
 class CartPageLocators(object):
     CART_PAGE_URL      = 'https://foodpassonline.com/checkout-2/'

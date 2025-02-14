@@ -22,3 +22,8 @@ class CheckoutPage:
         self.driver.get(self.locator.CHECKOUT_PAGE_URL)
         return self.__get_amount()
 
+    def submit_order(self):
+        self.driver.get(self.locator.CHECKOUT_PAGE_URL)
+        self.__wait_for_element(self.locator.ORDER_BUTTON)
+        order_btn = self.driver.find_element(*self.locator.ORDER_BUTTON)
+        self.driver.execute_script("arguments[0].click();", order_btn)
