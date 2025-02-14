@@ -1,6 +1,5 @@
 from time import sleep
 from xml.dom import NotFoundErr
-from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import NoSuchElementException
@@ -55,7 +54,7 @@ class FoodPass:
         except NoSuchElementException:
             return False
 
-    def is_order_free(self):
+    def __is_order_free(self):
         try:
             amount = self.checkout_page.get_order_price()
             if "0.00" in amount:
@@ -71,13 +70,11 @@ class FoodPass:
     def clear_cart(self):
         try:
             self.driver.get(self.cart_page.locator.CART_PAGE_URL)
-            sleep(5)
             hrefs = self.driver.find_elements(*self.cart_page.locator.REMOVE_BUTTON)
             try:
                 for u in hrefs:
                     url = self.driver.find_elements(*self.cart_page.locator.REMOVE_BUTTON)[0].get_attribute('href')
                     self.driver.get(url)
-                    sleep(1)
                     print("{0} An item was removed from the cart.".format(time_now))
             except StaleElementReferenceException:
                 return False
@@ -94,13 +91,13 @@ class FoodPass:
             pass
         return False
 
-    def order_meals(self, meals):
+    def __order_meals(self, meals):
         for url in meals:
             self.__add_item_in_cart(url)
             print("{0}: Meal {1} has been added to the cart.".format(time_now, url))
         return True
 
-    def order_lunchboxes(self, lunchboxes):
+    def __order_lunchboxes(self, lunchboxes):
         for url in lunchboxes:
             try:
                 if check_url(url):
@@ -112,12 +109,6 @@ class FoodPass:
                 pass
         return False
 
-    def submit_order(self):
-        if self.is_order_free():
-            self.checkout_page.submit_order()
-            return True # TODO: status
-        return False
-
     def form_order(self, meals, lunchboxes):
         self.driver.get(self.orders_page.locator.ORDERS_PAGE_URL)
         current_date = datetime.datetime.now().strftime("%d %B %Y").lstrip('0')
@@ -125,9 +116,15 @@ class FoodPass:
             print("{0}: The user has already ordered today.".format(time_now))
             return False
         else:
-            if self.order_lunchboxes(lunchboxes):
+            if self.__order_lunchboxes(lunchboxes):
                 return True
-            elif self.order_meals(meals):
+            elif self.__order_meals(meals):
                 return True
             else:
                 return False
+
+    def submit_order(self):
+        if self.__is_order_free():
+            self.checkout_page.submit_order()
+            return True # TODO: status
+        return False
