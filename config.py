@@ -1,5 +1,11 @@
 import user as users
 
+# List of days you want to make order (Monday=0 ... Sunday=6). Keep in mind that you're ordering for the next day.
+# (Hybrid days - Wednesday, friday)
+# order_days = [6, 0, 2 ]   # Sunday, Monday, Wednesday.
+#(all days in office):
+order_days = [6, 0, 1, 2, 3]   # Sunday, Monday, Tuesday, Wednesday, Thursday
+
 userList = [
             users.user(
                 username   = "Username",
