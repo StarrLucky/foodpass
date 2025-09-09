@@ -10,9 +10,9 @@ time_now = datetime.datetime.now(my_tz)
 def allowed_order():
     today = datetime.datetime.today().weekday()
     is_allowed = True
-    if today > 5:
+    if today not in config.order_days:
         is_allowed = False
-        print("{0}: Current day of week {1} is out  of order days (MON - FRI)".format(time_now, today))
+        print("{0}: Current day of week {1} is out of order days {2}".format(time_now, today, config.order_days))
     elif 22 > time_now.hour < 14:
         is_allowed = False
         print("{0}: Current time is out of order hours (14:00 - 22:00 GMT+4)".format(time_now))
