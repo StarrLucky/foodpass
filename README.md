@@ -4,14 +4,22 @@ It checks whether each user from `config.py` does not have an active order for t
 
 ## Example of the Config
 
+- `order_days` - specifies days that allows script to make orders. If you work from office all week, leave it to [6, 0, 1, 2, 3] (Sunday, Monday, Tuesday, Wednesday, Thursday). 
 - `username`   - login used for https://foodpassonline.com
 - `password`   - password 
 - `lunchboxes` - list of your favorite lunchboxes. The script determines whether one of the URLs is available and orders it. The script uses the `meals` list if there isn't any:
 - `meals`      -  A list of dishes to order. These are typically always listed on the website. The total price of all dishes should be less than 15 lari.
- 
+
 ```PYTHON
 
 import user as users
+
+# List of days you want to make order (Monday=0 ... Sunday=6). Keep in mind that you're ordering for the next day.
+# (Hybrid days - Wednesday, friday)
+# order_days = [6, 0, 2 ]   # Sunday, Monday, Wednesday.
+#(all days in office):
+order_days = [6, 0, 1, 2, 3]   # Sunday, Monday, Tuesday, Wednesday, Thursday
+
 
 userList = [
     users.user(
