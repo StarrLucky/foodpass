@@ -25,12 +25,12 @@ if allowed_order():
         print("{0}: Ordering for {1}".format(time_now, u.username))
         if not food_pass.login(u.username, u.password):
             print("{0} Login for {1} failed.".format(time_now, u.username))
-            break
+            continue
         if not food_pass.clear_cart():
             print("{0} Cannot clear cart.".format(time_now))
-            break
+            continue
         if not food_pass.form_order(u.meals, u.lunchboxes):
-            break
+            continue
         if food_pass.submit_order():
             print("{0}: Order for {1} is successful".format(time_now, u.username))
         else:
